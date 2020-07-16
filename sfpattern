@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# colors
+red='\e[38;5;160m'
+green='\e[38;5;84m'
+blue='\e[38;5;87m'
+yellow='\e[38;5;190m'
+pink='\e[38;5;198m'
+reset='\e[0m'
+
+# alias function to 'echo -e'
+function eco() if [[ -n $1 ]]; then echo -e $1; fi
+
+# mode of use
+function usage() {
+  eco "${blue}*${reset} Search files by Pattern ${blue}*${reset}";
+  eco "${green}\$${reset} sfpattern <path> <string> <name of file(s)>";
+}
+
+# user help
+function help() {
+  if [ $1 = '-h' ];
+  then
+    usage;
+    eco "Exemplo:"
+    eco "${green}\$${reset} sfpattern smali 'firebase' '*.smali'"
+    eco "* Procura no diretório smali, os arquivos que tenham a extensão \
+    smali, e que contenham a string firebase";
+    exit;
+  else
+    usage;
+  fi
+}
+
+# Procura pelos arquivos que contenham a
+# string procurada;
+findfile() {
+  eco "${blue}*${reset} Procurando por: ${2}"
+  eco "${green}**${reset} No diretório:  ${1}";
+  eco "${pink}***${reset} Nos arquivos: ${3}"
+
+  define -a matched_files;
+  index=0;
+
+  for file in $(find $1 -name $3); do
+    grep -n "$2" $file;
+    if [ $? -eq 0 ];
+    then
+      matched_files[$index]=$file;
+      index=$((index+1));
+    else
+      echo -e "NOT FOUND: ${red} $file ${reset}";
+    fi;
+  done;
+
+  # show results
+  for file in ${matched_files[@]}; do
+    echo $file
+    grep -n "$2" $file
+    eco "FOUNDED: ${green} $file ${reset}"
+  done;
+}
+
+# Checa se a opção de ajuda foi solicitada.
+if [ "$#" -eq 1 ];
+then
+  help $1; exit;
+fi
+
+# Checa se o número de argumentos é menor
+# que três, para chamar a função usage();
+if [ "$#" -lt 3 ];
+then
+  usage;
+else
+  findfile $1 $2 $3;
+fi
