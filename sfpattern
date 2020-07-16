@@ -34,7 +34,7 @@ function help() {
 
 # Procura pelos arquivos que contenham a
 # string procurada;
-findfile() {
+function findfile() {
   eco "${blue}*${reset} Procurando por: ${2}"
   eco "${green}**${reset} No diretório:  ${1}";
   eco "${pink}***${reset} Nos arquivos: ${3}"
