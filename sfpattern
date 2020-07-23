@@ -39,7 +39,7 @@ function findfile() {
   eco "${green}**${reset} No diretório:  ${1}";
   eco "${pink}***${reset} Nos arquivos: ${3}"
 
-  define -a matched_files;
+  declare -a matched_files;
   index=0;
 
   for file in $(find $1 -name $3); do
