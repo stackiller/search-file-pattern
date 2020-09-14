@@ -49,13 +49,13 @@ function findfile() {
       matched_files[$index]=$file;
       index=$((index+1));
     else
-      echo -e "NOT FOUND: ${red} $file ${reset}";
+      eco -e "NOT FOUND: ${red} $file ${reset}";
     fi;
   done;
 
   # show results
   for file in ${matched_files[@]}; do
-    echo $file
+    eco $file
     grep -n "$2" $file
     eco "FOUNDED: ${green} $file ${reset}"
   done;
